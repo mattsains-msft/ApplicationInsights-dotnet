@@ -9,6 +9,7 @@
     using Microsoft.ApplicationInsights.AspNetCore.Extensibility.Implementation.Tracing;
     using Microsoft.ApplicationInsights.AspNetCore.Extensions;
     using Microsoft.ApplicationInsights.Extensibility.Implementation.Tracing;
+    using Microsoft.ApplicationInsights.Internals;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Options;
     using OpenTelemetry;
@@ -115,7 +116,10 @@
             }
 
             Action<ResourceBuilder> configureResource = (r) => r
-                .AddAttributes(new[] { new KeyValuePair<string, object>("telemetry.distro.name", "Microsoft.ApplicationInsights.AspNetCore") })
+                .AddAttributes(new[] {
+                    new KeyValuePair<string, object>("telemetry.distro.name", "Microsoft.ApplicationInsights.AspNetCore"),
+                    new KeyValuePair<string, object>("telemetry.distro.version", VersionUtils.GetVersion(typeof(ApplicationInsightsExtensions))),
+                })
                 .AddAzureAppServiceDetector()
                 .AddAzureVMDetector()
                 .AddDetector(sp => new AspNetCoreEnvironmentResourceDetector(sp.GetService<IConfiguration>()));
