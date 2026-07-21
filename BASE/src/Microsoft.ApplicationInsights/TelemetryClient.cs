@@ -191,6 +191,7 @@
 
             var state = new DictionaryLogState(telemetry.Context, mergedProperties, String.Empty);
             this.Logger.Log(LogLevel.Information, 0, state, null, (s, ex) => s.Message);
+            TelemetryDebugWriter.WriteTelemetry(telemetry);
         }
 
         /// <summary>
@@ -270,6 +271,7 @@
 
             var state = new DictionaryLogState(telemetry.Context, properties, telemetry.Message ?? String.Empty);
             this.Logger.Log(LogLevel.Information, 0, state, null, (s, ex) => s.Message);
+            TelemetryDebugWriter.WriteTelemetry(telemetry);
         }
 
         /// <summary>
@@ -379,7 +381,7 @@
         /// </summary>
         /// <param name="name">Metric name.</param>
         /// <param name="value">Metric value.</param>
-        /// <param name="properties">Named string values you can use to classify and filter metrics.</param>        
+        /// <param name="properties">Named string values you can use to classify and filter metrics.</param>
         public void TrackMetric(string name, double value, IDictionary<string, string> properties = null)
         {
             this.Configuration.FeatureReporter.MarkFeatureInUse(StatsbeatFeatures.TrackMetric);
@@ -410,7 +412,7 @@
         /// If your application requires sending a separate telemetry item at every occasion without aggregation across time,
         /// you likely have a use case for event telemetry; see <see cref="TrackEvent(EventTelemetry)"/>.
         /// </summary>
-        /// <param name="telemetry">The metric telemetry item.</param>        
+        /// <param name="telemetry">The metric telemetry item.</param>
         public void TrackMetric(MetricTelemetry telemetry)
         {
             this.Configuration.FeatureReporter.MarkFeatureInUse(StatsbeatFeatures.TrackMetric);
@@ -531,7 +533,7 @@
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method implements a shim layer that converts Application Insights DependencyTelemetry objects 
+        /// This method implements a shim layer that converts Application Insights DependencyTelemetry objects
         /// into OpenTelemetry Activities. The Azure Monitor Exporter then processes these Activities to emit telemetry.
         /// </para>
         /// <para>
@@ -560,7 +562,7 @@
         /// </list>
         /// <para>
         /// These override attributes ensure backward compatibility and prevent data loss during the OpenTelemetry migration.
-        /// For Activities created by OpenTelemetry instrumentation (without override attributes), the exporter will map 
+        /// For Activities created by OpenTelemetry instrumentation (without override attributes), the exporter will map
         /// semantic convention attributes (url.full, db.system, messaging.system, etc.) to Application Insights fields.
         /// </para>
         /// <a href="https://go.microsoft.com/fwlink/?linkid=525722#trackdependency">Learn more</a>
@@ -707,7 +709,7 @@
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method implements a shim layer that converts Application Insights RequestTelemetry objects 
+        /// This method implements a shim layer that converts Application Insights RequestTelemetry objects
         /// into OpenTelemetry Activities. The Azure Monitor Exporter then processes these Activities to emit telemetry.
         /// </para>
         /// <para>
@@ -735,7 +737,7 @@
         /// </list>
         /// <para>
         /// These override attributes ensure backward compatibility and prevent data loss during the OpenTelemetry migration.
-        /// For Activities created by OpenTelemetry instrumentation (without override attributes), the exporter will map 
+        /// For Activities created by OpenTelemetry instrumentation (without override attributes), the exporter will map
         /// semantic convention attributes (url.full, http.response.status_code, messaging.system, etc.) to Application Insights fields.
         /// </para>
         /// <a href="https://go.microsoft.com/fwlink/?linkid=525722#trackrequest">Learn more</a>
