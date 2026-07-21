@@ -16,7 +16,7 @@ namespace Microsoft.ApplicationInsights.Extensibility.Implementation
     /// <summary>
     /// Writes telemetry items to debug output.
     /// </summary>
-    public class TelemetryDebugWriter : IDebugOutput
+    public static class TelemetryDebugWriter
     {
         /// <summary>
         /// Gets or sets a value indicating whether writing telemetry items to debug output is enabled.
@@ -37,22 +37,17 @@ namespace Microsoft.ApplicationInsights.Extensibility.Implementation
             if (TelemetryDebugWriter.IsAttached() && TelemetryDebugWriter.IsLogging())
             {
                 string prefix = "Application Insights Telemetry: ";
-                if (string.IsNullOrEmpty(telemetry.Context.InstrumentationKey))
-                {
-                    prefix = "Application Insights Telemetry (unconfigured): ";
-                }
-
                 string serializedTelemetry = JsonSerializer.SerializeAsString(telemetry);
-                output.WriteLine(prefix + serializedTelemetry);
+                TelemetryDebugWriter.WriteLine(prefix + serializedTelemetry);
             }
         }
 
-        static void IDebugOutput.WriteLine(string message)
+        static void WriteLine(string message)
         {
             Debugger.Log(0, "category", message + Environment.NewLine);
         }
 
-        static bool IDebugOutput.IsLogging()
+        static bool IsLogging()
         {
             if (IsTracingDisabled)
             {
@@ -62,7 +57,7 @@ namespace Microsoft.ApplicationInsights.Extensibility.Implementation
             return Debugger.IsLogging();
         }
 
-        static bool IDebugOutput.IsAttached()
+        static bool IsAttached()
         {
             return Debugger.IsAttached;
         }
