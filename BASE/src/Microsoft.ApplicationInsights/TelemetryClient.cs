@@ -154,16 +154,21 @@
         public void TrackEvent(string eventName, IDictionary<string, string> properties = null)
         {
             this.Configuration.FeatureReporter.MarkFeatureInUse(StatsbeatFeatures.TrackEvent);
+
             if (string.IsNullOrEmpty(eventName))
             {
                 CoreEventSource.Log.TrackEventInvalidName();
                 return;
             }
 
-            var mergedProperties = EnsureMutable(properties);
-            mergedProperties["microsoft.custom_event.name"] = eventName;
-            var state = new DictionaryLogState(mergedProperties, String.Empty);
-            this.Logger.Log(LogLevel.Information, 0, state, null, (s, ex) => s.Message);
+            var telemetry = new EventTelemetry(eventName);
+
+            if (properties != null && properties.Count > 0)
+            {
+                Utils.CopyDictionary(properties, telemetry.Properties);
+            }
+
+            this.TrackEvent(telemetry);
         }
 
         /// <summary>
