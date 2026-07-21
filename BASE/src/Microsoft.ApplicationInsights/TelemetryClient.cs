@@ -656,6 +656,7 @@
                     ApplyContextToActivity(telemetry.Context, dependencyTelemetryActivity);
                 }
             }
+            TelemetryDebugWriter.WriteTelemetry(telemetry);
         }
 
         /// <summary>
@@ -825,6 +826,7 @@
                     ApplyContextToActivity(request.Context, activity);
                 }
             }
+            TelemetryDebugWriter.WriteTelemetry(request);
         }
 
         /// <summary>
