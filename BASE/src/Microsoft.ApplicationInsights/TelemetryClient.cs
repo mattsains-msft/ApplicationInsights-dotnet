@@ -153,8 +153,6 @@
         /// <param name="properties">Named string values you can use to search and classify events.</param>
         public void TrackEvent(string eventName, IDictionary<string, string> properties = null)
         {
-            this.Configuration.FeatureReporter.MarkFeatureInUse(StatsbeatFeatures.TrackEvent);
-
             if (string.IsNullOrEmpty(eventName))
             {
                 CoreEventSource.Log.TrackEventInvalidName();
@@ -214,7 +212,6 @@
         /// </remarks>
         public void TrackAvailability(string name, DateTimeOffset timeStamp, TimeSpan duration, string runLocation, bool success, string message = null, IDictionary<string, string> properties = null)
         {
-            this.Configuration.FeatureReporter.MarkFeatureInUse(StatsbeatFeatures.TrackAvailability);
             var availabilityTelemetry = new AvailabilityTelemetry(name, timeStamp, duration, runLocation, success, message);
 
             if (properties != null && properties.Count > 0)
@@ -465,14 +462,19 @@
         /// </remarks>
         public void TrackException(Exception exception, IDictionary<string, string> properties = null)
         {
-            this.Configuration.FeatureReporter.MarkFeatureInUse(StatsbeatFeatures.TrackException);
             if (exception == null)
             {
-                exception = new InvalidOperationException(Utils.PopulateRequiredStringValue(null, "message", typeof(ExceptionTelemetry).FullName));
+                exception = new Exception(Utils.PopulateRequiredStringValue(null, "message", typeof(ExceptionTelemetry).FullName));
             }
 
-            var state = new DictionaryLogState(properties, exception.Message);
-            this.Logger.Log(LogLevel.Error, 0, state, exception, (s, ex) => s.Message);
+            var telemetry = new ExceptionTelemetry(exception);
+
+            if (properties != null && properties.Count > 0)
+            {
+                Utils.CopyDictionary(properties, telemetry.Properties);
+            }
+
+            this.TrackException(telemetry);
         }
 
         /// <summary>
@@ -501,6 +503,7 @@
             var state = new DictionaryLogState(telemetry.Context, mergedProperties, reconstructedException.Message);
             var logLevel = GetLogLevel(telemetry.SeverityLevel ?? SeverityLevel.Error);
             this.Logger.Log(logLevel, 0, state, reconstructedException, (s, ex) => s.Message);
+            TelemetryDebugWriter.WriteTelemetry(telemetry);
         }
 
         /// <summary>
