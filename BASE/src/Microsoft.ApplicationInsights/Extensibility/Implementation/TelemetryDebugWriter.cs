@@ -11,7 +11,7 @@ namespace Microsoft.ApplicationInsights.Extensibility.Implementation
 
     using Microsoft.ApplicationInsights.Channel;
     using Microsoft.ApplicationInsights.Extensibility;
-    using Microsoft.ApplicationInsights.Extensibility.Implementation.Platform;
+
 
     /// <summary>
     /// Writes telemetry items to debug output.
@@ -34,8 +34,7 @@ namespace Microsoft.ApplicationInsights.Extensibility.Implementation
                 throw new ArgumentNullException(nameof(telemetry));
             }
 
-            var output = PlatformSingleton.Current.GetDebugOutput();
-            if (output.IsAttached() && output.IsLogging())
+            if (TelemetryDebugWriter.IsAttached() && TelemetryDebugWriter.IsLogging())
             {
                 string prefix = "Application Insights Telemetry: ";
                 if (string.IsNullOrEmpty(telemetry.Context.InstrumentationKey))
@@ -48,12 +47,12 @@ namespace Microsoft.ApplicationInsights.Extensibility.Implementation
             }
         }
 
-        void IDebugOutput.WriteLine(string message)
+        static void IDebugOutput.WriteLine(string message)
         {
             Debugger.Log(0, "category", message + Environment.NewLine);
         }
 
-        bool IDebugOutput.IsLogging()
+        static bool IDebugOutput.IsLogging()
         {
             if (IsTracingDisabled)
             {
@@ -63,7 +62,7 @@ namespace Microsoft.ApplicationInsights.Extensibility.Implementation
             return Debugger.IsLogging();
         }
 
-        bool IDebugOutput.IsAttached()
+        static bool IDebugOutput.IsAttached()
         {
             return Debugger.IsAttached;
         }
