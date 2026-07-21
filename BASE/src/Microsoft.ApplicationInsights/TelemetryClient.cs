@@ -288,9 +288,8 @@
         /// <param name="message">Message to display.</param>
         public void TrackTrace(string message)
         {
-            this.Configuration.FeatureReporter.MarkFeatureInUse(StatsbeatFeatures.TrackTrace);
-            var state = new DictionaryLogState(null, message);
-            this.Logger.Log(LogLevel.Information, 0, state, null, (s, ex) => s.Message);
+            TraceTelemetry telemetry = new TraceTelemetry(message);
+            this.TrackTrace(telemetry);
         }
 
         /// <summary>
@@ -303,10 +302,8 @@
         /// <param name="severityLevel">Trace severity level.</param>
         public void TrackTrace(string message, SeverityLevel severityLevel)
         {
-            this.Configuration.FeatureReporter.MarkFeatureInUse(StatsbeatFeatures.TrackTrace);
-            LogLevel logLevel = GetLogLevel(severityLevel);
-            var state = new DictionaryLogState(null, message);
-            this.Logger.Log(logLevel, 0, state, null, (s, ex) => s.Message);
+            TraceTelemetry telemetry = new TraceTelemetry(message, severityLevel);
+            this.TrackTrace(telemetry);
         }
 
         /// <summary>
@@ -319,9 +316,14 @@
         /// <param name="properties">Named string values you can use to search and classify events.</param>
         public void TrackTrace(string message, IDictionary<string, string> properties)
         {
-            this.Configuration.FeatureReporter.MarkFeatureInUse(StatsbeatFeatures.TrackTrace);
-            var state = new DictionaryLogState(properties, message);
-            this.Logger.Log(LogLevel.Information, 0, state, null, (s, ex) => s.Message);
+            TraceTelemetry telemetry = new TraceTelemetry(message);
+
+            if (properties != null && properties.Count > 0)
+            {
+                Utils.CopyDictionary(properties, telemetry.Properties);
+            }
+
+            this.TrackTrace(telemetry);
         }
 
         /// <summary>
@@ -335,10 +337,14 @@
         /// <param name="properties">Named string values you can use to search and classify events.</param>
         public void TrackTrace(string message, SeverityLevel severityLevel, IDictionary<string, string> properties)
         {
-            this.Configuration.FeatureReporter.MarkFeatureInUse(StatsbeatFeatures.TrackTrace);
-            LogLevel logLevel = GetLogLevel(severityLevel);
-            var state = new DictionaryLogState(properties, message);
-            this.Logger.Log(logLevel, 0, state, null, (s, ex) => s.Message);
+            TraceTelemetry telemetry = new TraceTelemetry(message, severityLevel);
+
+            if (properties != null && properties.Count > 0)
+            {
+                Utils.CopyDictionary(properties, telemetry.Properties);
+            }
+
+            this.TrackTrace(telemetry);
         }
 
         /// <summary>
@@ -374,6 +380,7 @@
             LogLevel logLevel = GetLogLevel(telemetry.SeverityLevel.Value);
             var state = new DictionaryLogState(telemetry.Context, mergedProperties, telemetry.Message);
             this.Logger.Log(logLevel, 0, state, null, (s, ex) => s.Message);
+            TelemetryDebugWriter.WriteTelemetry(telemetry);
         }
 
         /// <summary>
