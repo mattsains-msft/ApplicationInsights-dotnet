@@ -1,10 +1,10 @@
 <Project>
   <!--
     Central Package Management for ApplicationInsights-dotnet
-    
+
     This file centralizes NuGet package version management for all projects in Everything.sln.
     Projects reference packages without Version attributes, which are defined here instead.
-    
+
     Learn more: https://learn.microsoft.com/nuget/consume-packages/central-package-management
   -->
 
@@ -12,38 +12,38 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
-  <!-- 
+  <!--
     ==============================================================================
     OPENTELEMETRY PACKAGES
-    Core packages using stable version 1.15.3 with some RC/Beta components
+    Core packages using stable version 1.19.1 with some RC/Beta components
     ==============================================================================
   -->
 
-  <ItemGroup Label="OpenTelemetry - Core (Stable 1.15.3)">
-    <PackageVersion Include="OpenTelemetry" Version="1.15.3" />
-    <PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.15.3" />
-    <PackageVersion Include="OpenTelemetry.Exporter.InMemory" Version="1.15.3" />
-    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.15.3" />
+  <ItemGroup Label="OpenTelemetry - Core (Stable 1.19.3)">
+    <PackageVersion Include="OpenTelemetry" Version="1.19.1" />
+    <PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.19.1" />
+    <PackageVersion Include="OpenTelemetry.Exporter.InMemory" Version="1.19.1" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.19.1" />
   </ItemGroup>
 
   <ItemGroup Label="OpenTelemetry - Instrumentation">
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.2" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNet" Version="1.15.2" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.15.1" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.15.2" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.16.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNet" Version="1.16.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.19.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.16.0" />
   </ItemGroup>
 
-  <!-- 
+  <!--
     ==============================================================================
     AZURE MONITOR PACKAGES
     ==============================================================================
   -->
 
   <ItemGroup Label="Azure Monitor">
-    <PackageVersion Include="Azure.Monitor.OpenTelemetry.Exporter" Version="1.8.0" />
+    <PackageVersion Include="Azure.Monitor.OpenTelemetry.Exporter" Version="1.9.0" />
   </ItemGroup>
 
-  <!-- 
+  <!--
     ==============================================================================
     MICROSOFT.EXTENSIONS PACKAGES
     Most packages on 10.0.2; Microsoft.Extensions.Options on 10.0.3 (required by Azure Monitor Exporter 1.8.0)
@@ -55,10 +55,10 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.2" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="10.0.10" />
   </ItemGroup>
 
-  <!-- 
+  <!--
     ==============================================================================
     TEST FRAMEWORK PACKAGES
     Used by all test projects
@@ -77,7 +77,7 @@
     <PackageVersion Include="CompareNETObjects" Version="4.84.0" />
   </ItemGroup>
 
-  <!-- 
+  <!--
     ==============================================================================
     NLOG PACKAGES
     NLog 5.3.4 required by NLog.Extensions.Logging 5.3.14
@@ -89,17 +89,17 @@
     <PackageVersion Include="NLog.Extensions.Logging" Version="5.3.14" />
   </ItemGroup>
 
-  <!-- 
+  <!--
     ==============================================================================
     SYSTEM PACKAGES
     ==============================================================================
   -->
 
   <ItemGroup Label="System">
-    <PackageVersion Include="System.Diagnostics.DiagnosticSource" Version="10.0.3" />
+    <PackageVersion Include="System.Diagnostics.DiagnosticSource" Version="10.0.10" />
   </ItemGroup>
 
-  <!-- 
+  <!--
     ==============================================================================
     ASPNETCORE TESTING PACKAGES
     Framework-specific version ranges for Microsoft.AspNetCore.Mvc.Testing
@@ -110,7 +110,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.11" />
   </ItemGroup>
 
-  <!-- 
+  <!--
     ==============================================================================
     ASPNET CLASSIC PACKAGES
     For .NET Framework projects only
@@ -123,7 +123,7 @@
     <PackageVersion Include="Microsoft.AspNet.WebApi" Version="5.3.0" />
   </ItemGroup>
 
-  <!-- 
+  <!--
     ==============================================================================
     CODE ANALYSIS AND BUILD TOOLING
     StyleCop, Roslyn analyzers, and SourceLink for debugging
